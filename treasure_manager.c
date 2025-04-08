@@ -5,7 +5,6 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <dirent.h>
 #include <time.h>
 #include <errno.h>
 
@@ -23,46 +22,22 @@ typedef struct {
     int value;
 } Treasure;
 
-void log_operation (const char *hunt_id, const char *message);
-void create_symlink (const char *hunt_id);
-char *get_hunt_path (const char *hunt_id, const char *filename);
-void add_treasure (const char *hunt_id);
-void list_treasures (const char *hunt_id);
-void view_treasure (const char *hunt_id, const char *treasure_id);
-void remove_treasure (const char *hunt_id, const char *treasure_id);
-void remove_hunt (const char *hunt_id);
-
-int main (int argc, char** argv) {
-    if (argc < 3) {
-        fprintf(stderr, "eroare argumente\nUsage: %s --<comanda> <hunt_id> [<id>]\n", argv[0]);
-        exit(EXIT_FAILURE);
-    }
-
-    const char* command = argv[1];
-    const char* hunt_id = argv[2];
-
-    if (strcmp(command, "--add") == 0)
-        add_treasure(hunt_id);
-    else if (strcmp(command, "--list") == 0)
-        list_treasures(hunt_id);
-    else if (strcmp(command, "--view") == 0 && argc == 4)
-        view_treasure(hunt_id, argv[3]);
-    else if (strcmp(command, "--remove_treasure") == 0 && argc == 4)
-        remove_treasure(hunt_id, argv[3]);
-    else if (strcmp(command, "--remove_hunt") == 0)
-        remove_hunt(hunt_id);
-    else {
-        fprintf(stderr, "operatie invalida\n");
-        exit(EXIT_FAILURE);
-    }
-
-    return 0;
-}
-
 char* get_hunt_path (const char* hunt_id, const char* filename) {
     static char path[BUFFER_SIZE];
     snprintf(path, sizeof(path), "./%s/%s", hunt_id, filename);
     return path;
+}
+
+void create_symlink (const char* hunt_id) {
+    char linkname[BUFFER_SIZE];
+    snprintf(linkname, sizeof(linkname), "./logged_hunt-%s", hunt_id);
+
+    char target[BUFFER_SIZE];
+    snprintf(target, sizeof(target), "./%s/logged_hunt", hunt_id);
+
+    if (access(linkname, F_OK) == -1) {
+        symlink(target, linkname);
+    }
 }
 
 void log_operation (const char* hunt_id, const char* message) {
@@ -84,22 +59,7 @@ void log_operation (const char* hunt_id, const char* message) {
     create_symlink(hunt_id);
 }
 
-void create_symlink (const char* hunt_id) {
-    char linkname[BUFFER_SIZE];
-    snprintf(linkname, sizeof(linkname), "./logged_hunt-%s", hunt_id);
-
-    char target[BUFFER_SIZE];
-    snprintf(target, sizeof(target), "./%s/logged_hunt", hunt_id);
-
-    if (access(linkname, F_OK) == -1) {
-        symlink(target, linkname);
-    }
-}
-
-// ================================
-// Core Function Placeholders
-// ================================
-
+//
 void add_treasure (const char* hunt_id) {
   mkdir(hunt_id, 0755);
     char* filepath = get_hunt_path(hunt_id, "treasures.dat");
@@ -241,4 +201,31 @@ void remove_hunt (const char* hunt_id) {
     unlink(linkname);
 
     printf("Hunt '%s' removed.\n", hunt_id);
+}
+
+int main (int argc, char** argv) {
+    if (argc < 3) {
+        fprintf(stderr, "eroare argumente\nUsage: %s --<comanda> <hunt_id> [<id>]\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    const char* command = argv[1];
+    const char* hunt_id = argv[2];
+
+    if (strcmp(command, "--add") == 0)
+        add_treasure(hunt_id);
+    else if (strcmp(command, "--list") == 0)
+        list_treasures(hunt_id);
+    else if (strcmp(command, "--view") == 0 && argc == 4)
+        view_treasure(hunt_id, argv[3]);
+    else if (strcmp(command, "--remove_treasure") == 0 && argc == 4)
+        remove_treasure(hunt_id, argv[3]);
+    else if (strcmp(command, "--remove_hunt") == 0)
+        remove_hunt(hunt_id);
+    else {
+        fprintf(stderr, "operatie invalida\n");
+        exit(EXIT_FAILURE);
+    }
+
+    return 0;
 }
