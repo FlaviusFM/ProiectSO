@@ -45,7 +45,7 @@ void log_operation (const char* hunt_id, const char* message) {
 
     int log_fd = open(log_path, O_WRONLY | O_CREAT | O_APPEND, 0644);
     if (log_fd < 0) {
-        perror("Failed to open log file");
+        perror("eroare deschidere fisier log");
         return;
     }
 
@@ -66,7 +66,7 @@ void add_treasure (const char* hunt_id) {
 
     int fd = open(filepath, O_WRONLY | O_CREAT | O_APPEND, 0644);
     if (fd < 0) {
-        perror("Error opening treasure file");
+        perror("eroare deschidere fisier");
         return;
     }
 
@@ -99,7 +99,7 @@ void list_treasures (const char* hunt_id) {
 
     struct stat st;
     if (stat(filepath, &st) < 0) {
-        perror("Cannot stat file");
+        perror("eroare fisier stat");
         return;
     }
 
@@ -109,7 +109,7 @@ void list_treasures (const char* hunt_id) {
 
     int fd = open(filepath, O_RDONLY);
     if (fd < 0) {
-        perror("Error opening treasure file");
+        perror("eroare deschidere fisier");
         return;
     }
 
@@ -126,7 +126,7 @@ void view_treasure (const char* hunt_id, const char* treasure_id) {
 
     int fd = open(filepath, O_RDONLY);
     if (fd < 0) {
-        perror("Error opening treasure file");
+        perror("eroare deschidere fisier");
         return;
     }
 
@@ -156,7 +156,7 @@ void remove_treasure (const char* hunt_id, const char* treasure_id) {
 
     int fd = open(filepath, O_RDONLY);
     if (fd < 0 || tmp_fd < 0) {
-        perror("Error opening files");
+        perror("eroare deschidere fisier");
         return;
     }
 
