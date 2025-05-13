@@ -41,7 +41,7 @@ void create_symlink (const char* hunt_id) {
 }
 
 void log_operation (const char* hunt_id, const char* message) {
-    char* log_path = get_hunt_path(hunt_id, "logged_hunt");
+    char *log_path = get_hunt_path(hunt_id, "logged_hunt");
 
     int log_fd = open(log_path, O_WRONLY | O_CREAT | O_APPEND, 0644);
     if (log_fd < 0) {
@@ -61,7 +61,7 @@ void log_operation (const char* hunt_id, const char* message) {
 
 //
 void add_treasure (const char* hunt_id) {
-    mkdir(hunt_id, 0755);
+  mkdir(hunt_id, 0755);
     char* filepath = get_hunt_path(hunt_id, "treasures.dat");
 
     int fd = open(filepath, O_WRONLY | O_CREAT | O_APPEND, 0644);
