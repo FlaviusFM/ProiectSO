@@ -129,7 +129,7 @@ int main (void) {
                 continue;
             }
 
-            char* hunt_id = input + 15; // tot ce urmează după "list_treasures "
+            char* hunt_id = input + 15; // tot ce urmeaza dupa "list_treasures "
 	    char full_cmd[256];
 	    snprintf(full_cmd, sizeof(full_cmd), "list_treasures %s", hunt_id);
 	    send_command_to_monitor(full_cmd);

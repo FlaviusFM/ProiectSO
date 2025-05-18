@@ -63,7 +63,7 @@ void process_command() {
 
     int fd = open(CMD_FILE, O_RDONLY);
     if (fd < 0) {
-        dprintf(output_fd, "Nu pot citi fișierul de comandă\n");
+        dprintf(output_fd, "Nu pot citi fisierul de comanda\n");
         return;
     }
 
@@ -188,7 +188,7 @@ void process_command() {
 	}
 	closedir(dir);
     } else {
-      dprintf(output_fd, "Monitor: Comandă necunoscută: %s\n", buffer);
+      dprintf(output_fd, "Monitor: Comanda necunoscuta: %s\n", buffer);
     }
 }
 
